@@ -138,10 +138,6 @@ dmypy.json
 cython_debug/
 
 
-# 
-*.pth 
-
-
 *.pth 
 *.jpg
 
