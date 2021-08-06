@@ -61,13 +61,7 @@ dataset = torch.utils.data.Subset(dataset, indices[:900])
 #dataset_test = torch.utils.data.Subset(dataset_test, indices[1400:])
 
 # define training and validation data loaders
-data_loader = torch.utils.data.DataLoader(
-    dataset, batch_size=1, shuffle=True, num_workers=0,
-    collate_fn=utils.collate_fn)
 
-data_loader_test = torch.utils.data.DataLoader(
-    dataset_test, batch_size=16, shuffle=False, num_workers=8,
-    collate_fn=utils.collate_fn)
 
 
 
@@ -113,7 +107,7 @@ for i in tqdm(range(len(dataset_test)), position=0, leave=True):
 
 
         if (prediction[0]['scores'][j]) > thresh:
-            s.save(f"../results/Alpha_Motor_{i}.png", format="png")
+            s.save(f"../results/motor_detection/Alpha_Motor_{i}.png", format="png")
         
     #v.save(f"Mask_test_{i}.png", format="png")
     #t.save(f"boxe_screw_test_{i}.png", format="png")

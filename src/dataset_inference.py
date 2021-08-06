@@ -10,15 +10,15 @@ class DetectDataset(torch.utils.data.Dataset):
         self.root = root
         self.transform = transform
 
-        self.imgs = list(sorted(os.listdir(os.path.join(root, "Images_motor")))) #Images_test
-        self.masks = list(sorted(os.listdir(os.path.join(root, "Masks_nuts"))))
+        self.imgs = list(sorted(os.listdir(os.path.join(root, "Motor_detection_video")))) #Images_test
+        self.masks = list(sorted(os.listdir(os.path.join(root, "Masks_motor"))))
 
     def __len__(self):
         return len(self.imgs)
 
     def __getitem__(self, idx):
-        img_path = os.path.join(self.root, "Images_motor", self.imgs[idx])
-        mask_path = os.path.join(self.root, "Masks_nuts", self.masks[idx])
+        img_path = os.path.join(self.root, "Motor_detection_video", self.imgs[idx])
+        mask_path = os.path.join(self.root, "Masks_motor", self.masks[idx])
         img = Image.open(img_path).convert("RGB")
         mask = Image.open(mask_path)
         mask = np.array(mask)
