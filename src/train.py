@@ -16,7 +16,7 @@ import transforms as T
 import albumentations
 
 
-def get_instance_segmentation_model(num_classes=2): #(2)
+def get_instance_segmentation_model(num_classes=2):  # (2)
     # load an instance segmentation model pre-trained on COCO
     model = torchvision.models.detection.maskrcnn_resnet50_fpn(pretrained=True)
 
@@ -34,19 +34,19 @@ def get_instance_segmentation_model(num_classes=2): #(2)
     )
 
     return model
+
+
 mean = (0.485, 0.456, 0.406)
 std = (0.229, 0.224, 0.225)
 
 aug = albumentations.Compose(
-            [   
-                albumentations.HorizontalFlip(p=0.2),
-                albumentations.VerticalFlip(p=0.2),
-                albumentations.RandomCrop(255, 255),
-                albumentations.Normalize(
-                    mean, std
-                )
-            ]
-        )
+    [
+        albumentations.HorizontalFlip(p=0.2),
+        albumentations.VerticalFlip(p=0.2),
+        albumentations.RandomCrop(255, 255),
+        albumentations.Normalize(mean, std),
+    ]
+)
 
 dataset = DetectDataset("../input/", get_transform(train=True))
 dataset_test = DetectDataset("../input/", get_transform(train=False))
@@ -54,8 +54,8 @@ dataset_test = DetectDataset("../input/", get_transform(train=False))
 # split the dataset in train and test set
 torch.manual_seed(1)
 indices = torch.randperm(len(dataset)).tolist()
-dataset = torch.utils.data.Subset(dataset, indices[:1400]) # :-50
-dataset_test = torch.utils.data.Subset(dataset_test, indices[1400:]) # -50:
+dataset = torch.utils.data.Subset(dataset, indices[:1400])  # :-50
+dataset_test = torch.utils.data.Subset(dataset_test, indices[1400:])  # -50:
 
 # define training and validation data loaders
 data_loader = torch.utils.data.DataLoader(
@@ -74,18 +74,18 @@ data_loader_test = torch.utils.data.DataLoader(
 device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
 # our dataset has two classes only - background and screw
-num_classes = 2 #2
+num_classes = 2  # 2
 
 # get the model using our helper function
 model = get_instance_segmentation_model(num_classes)
-#model.load_state_dict(torch.load("../saved_models/best_model_2.pth"))
+# model.load_state_dict(torch.load("../saved_models/best_model_2.pth"))
 # move model to the right device
 model.to(device)
 
 # construct an optimizer
 params = [p for p in model.parameters() if p.requires_grad]
 optimizer = torch.optim.SGD(
-    params, lr=0.001, momentum=0.9 ,weight_decay=0.0005  # 0.005
+    params, lr=0.001, momentum=0.9, weight_decay=0.0005  # 0.005
 )  # 0.0005
 
 # and a learning rate scheduler which decreases the learning rate by
@@ -113,4 +113,4 @@ for epoch in range(num_epochs):
     s = Image.fromarray(img.mul(255).permute(1, 2, 0).byte().numpy())
     v = Image.fromarray(prediction[0]["masks"][0, 0].mul(255).byte().cpu().numpy())
     s.save(f"train_{i}.png", format="png")
-    #v.save(f"Mask_screw_test{i}.png", format="png")""" 
+    #v.save(f"Mask_screw_test{i}.png", format="png")"""

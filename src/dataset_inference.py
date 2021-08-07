@@ -10,7 +10,9 @@ class DetectDataset(torch.utils.data.Dataset):
         self.root = root
         self.transform = transform
 
-        self.imgs = list(sorted(os.listdir(os.path.join(root, "Motor_detection_video")))) #Images_test
+        self.imgs = list(
+            sorted(os.listdir(os.path.join(root, "Motor_detection_video")))
+        )  # Images_test
         self.masks = list(sorted(os.listdir(os.path.join(root, "Masks_motor"))))
 
     def __len__(self):
@@ -41,7 +43,7 @@ class DetectDataset(torch.utils.data.Dataset):
         masks = torch.as_tensor(masks, dtype=torch.uint8)
 
         image_id = torch.tensor([idx])
-        #print(len(boxes))
+        # print(len(boxes))
         area = (boxes[:, 3] - boxes[:1]) * (boxes[:, 2] - boxes[:, 0])
         iscrowd = torch.zeros((num_objs,), dtype=torch.int64)
 

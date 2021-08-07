@@ -2,7 +2,7 @@ import math
 import sys
 import time
 import torch
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import torchvision.models.detection.mask_rcnn
 
 from coco_utils import get_coco_api_from_dataset
@@ -37,9 +37,8 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
         losses_reduced = sum(loss for loss in loss_dict_reduced.values())
 
         loss_value = losses_reduced.item()
-          #### 
-        loss_plot.append(loss_value/16)
-    
+        ####
+        loss_plot.append(loss_value / 16)
 
         if not math.isfinite(loss_value):
             print("Loss is {}, stopping training".format(loss_value))
@@ -59,12 +58,12 @@ def train_one_epoch(model, optimizer, data_loader, device, epoch, print_freq):
         plt.plot(loss_plot)
         plt.xlabel("Iterations")
         plt.ylabel("Loss")
-        fig.savefig('Loss_local.png')
+        fig.savefig("Loss_local.png")
     fig = plt.figure()
-    plt.plot(epoch, (loss_plot[0] + loss_plot[1])/2)
+    plt.plot(epoch, (loss_plot[0] + loss_plot[1]) / 2)
     plt.xlabel("Epoch")
     plt.ylabel("Loss")
-    fig.savefig(f'Loss.png')
+    fig.savefig(f"Loss.png")
     torch.save(model.state_dict(), "./best_model.pth")
 
     return metric_logger
